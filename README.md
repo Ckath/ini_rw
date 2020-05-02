@@ -10,7 +10,7 @@ minimal ini parser with read/write functionality. single header include.
 ## functions
 - `INI *ini_load(char *path)`\
 load in ini file
-- `ini_free(IMI *ini)`\
+- `ini_free(INI *ini)`\
 free loaded ini
 - `char **ini_list_sections(INI *ini)`\
 retrieve a list of all loaded sections
