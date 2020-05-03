@@ -17,8 +17,8 @@ free loaded ini
 - `char **ini_list_sections(INI *ini)`\
 retrieve a list of all loaded sections, last element will be `NULL`
 - `char *ini_read(INI *ini, char *section, char *item)`\
-retrieve value of `item` in	`section`
+retrieve value of `item` in	`section`. returns `NULL` on item not found
 - `int ini_write(INI *ini, char *section, char *item, char *value)`\
-write `value` to `item` in `section`, returns write actions
+write `value` to `item` in `section`. returns write actions, meaning `0` on item already in with that value
 - `int ini_remove(INI *ini, char *section, char *item)`\
-remove `item`(pass `NULL` to remove entire section) in `section`, returns remove actions.
+remove `item`(pass `NULL` to remove entire section) in `section`. returns remove actions, meaning `0` on item not found
