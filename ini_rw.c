@@ -255,6 +255,7 @@ ini_write(INI *ini, char *section, char *item, char *value)
 	} else if (strcmp(value, i->value)) { /* existing item updated */
 		i->value = realloc(i->value, strlen(value)+1);
 		strcpy(i->value, value);
+		save_file(ini);
 		return ++r;
 	} else { /* item exists with same value */
 		return r;
