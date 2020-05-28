@@ -161,6 +161,9 @@ ini_load(char *path)
 
 	/* obtain file and size */
 	FILE *f = fopen(ini->file, "r");
+	if (!f) { /* file doesnt exist yet nothing to load */
+		return ini;
+	}
 	fseek(f, 0, SEEK_END);
 	long size = ftell(f);
 
