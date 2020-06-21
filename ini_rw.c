@@ -177,7 +177,10 @@ ini_load(char *path)
 	char *line_end;
 	char *current_section;
 	while ((line_end = strchr(r, '\n'))) {
-		if (strchr(r, '[') && strchr(r, '[') < line_end) {
+		if (r[0] == ';' || r[0] == '#') { /* skip comments */
+			r = line_end+1;
+			continue;
+		} if (strchr(r, '[') && strchr(r, '[') < line_end) {
 			/* extract section */
 			int l = strchr(r, ']')-strchr(r, '[');
 			char section[l];
