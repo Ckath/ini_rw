@@ -121,6 +121,42 @@ add_section(INI *ini, char *name)
 	return ini->tail;
 }
 
+int
+add_item(INI *ini, char *section, char *item, char *value)
+{
+	int r = 0;
+	section_t *s = add_section(ini, section);
+	item_t *i = find_item(s, item);
+
+	if (!i) { /* new item created */
+		r++;
+		i = malloc(sizeof(item_t));
+		i->name = malloc(strlen(item)+1);
+		strcpy(i->name, item);
+		i->value = malloc(strlen(value)+1);
+		strcpy(i->value, value);
+		i->next = NULL;
+	} else if (strcmp(value, i->value)) { /* existing item updated */
+		i->value = realloc(i->value, strlen(value)+1);
+		strcpy(i->value, value);
+		save_file(ini);
+		return ++r;
+	} else { /* item exists with same value */
+		return r;
+	}
+
+	/* add item BTF, at head when no items existed yet */
+	if (!s->items) {
+		r++;
+		s->items = i;
+	} else {
+		s->tail->next = i;
+	}
+	s->tail = i;
+
+	return r;
+}
+
 static int
 rm_section(INI *ini, section_t *s)
 {
@@ -207,7 +243,7 @@ ini_load(char *path)
 			value[line_end-r] = '\0';
 
 			/* store */
-			ini_write(ini, current_section, item, value);
+			add_item(ini, current_section, item, value);
 		}
 		r = line_end+1;
 	}
@@ -246,37 +282,10 @@ ini_read(INI *ini, char *section, char *item)
 int
 ini_write(INI *ini, char *section, char *item, char *value)
 {
-	int r = 0;
-	section_t *s = add_section(ini, section);
-	item_t *i = find_item(s, item);
-
-	if (!i) { /* new item created */
-		r++;
-		i = malloc(sizeof(item_t));
-		i->name = malloc(strlen(item)+1);
-		strcpy(i->name, item);
-		i->value = malloc(strlen(value)+1);
-		strcpy(i->value, value);
-		i->next = NULL;
-	} else if (strcmp(value, i->value)) { /* existing item updated */
-		i->value = realloc(i->value, strlen(value)+1);
-		strcpy(i->value, value);
+	int r = add_item(ini, section, item, value);
+	if (r) {
 		save_file(ini);
-		return ++r;
-	} else { /* item exists with same value */
-		return r;
 	}
-
-	/* add item BTF, at head when no items existed yet */
-	if (!s->items) {
-		r++;
-		s->items = i;
-	} else {
-		s->tail->next = i;
-	}
-	s->tail = i;
-
-	save_file(ini);
 	return r;
 }
 
