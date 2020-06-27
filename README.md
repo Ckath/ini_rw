@@ -16,6 +16,8 @@ load in ini file
 free loaded ini
 - `char **ini_list_sections(INI *ini)`\
 retrieve a list of all loaded sections, last element will be `NULL`
+- `char **ini_list_items(INI *ini, char *section)`\
+retrieve a list of all loaded items in the section, last element will be `NULL`
 - `char *ini_read(INI *ini, char *section, char *item)`\
 retrieve value of `item` in	`section`. returns `NULL` on item not found
 - `int ini_write(INI *ini, char *section, char *item, char *value)`\

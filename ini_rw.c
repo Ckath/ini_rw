@@ -22,6 +22,7 @@ struct section_t {
 	item_t *next;
 }; struct ini {
 	char **section_names;
+	char **item_names;
 	section_t *sections;
 	section_t *tail;
 	char file[PATH_MAX];
@@ -57,6 +58,21 @@ free_section_names(INI *ini)
 		free(ini->section_names[i]);
 	}
 	free(ini->section_names);
+}
+
+static void
+free_item_names(INI *ini)
+{
+	/* nothing loaded */
+	if (!ini->item_names) {
+		return;
+	}
+
+	int i = -1;
+	while (ini->item_names[++i]) {
+		free(ini->item_names[i]);
+	}
+	free(ini->item_names);
 }
 
 section_t *
@@ -264,6 +280,27 @@ ini_list_sections(INI *ini)
 	}
 	ini->section_names[n] = NULL;
 	return ini->section_names;
+}
+
+char **
+ini_list_items(INI *ini, char *section)
+{
+	/* make sure section exists */
+	section_t *s;
+	if (!(s = find_section(ini, section))) {
+		return NULL;
+	}
+
+	/* rebuild item list on request, store in ini * */
+	free_item_names(ini);
+	int n = 0;
+	for (item_t *i = s->items; i; i = i->next, n++) {
+		ini->item_names = realloc(ini->item_names, sizeof(char *)*(n+2));
+		ini->item_names[n] = malloc(strlen(i->name)+1);
+		strcpy(ini->item_names[n], i->name);
+	}
+	ini->item_names[n] = NULL;
+	return ini->item_names;
 }
 
 
