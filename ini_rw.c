@@ -210,6 +210,7 @@ ini_load(char *path)
 	strcpy(ini->file, path);
 	ini->sections = NULL;
 	ini->section_names = NULL;
+	ini->item_names = NULL;
 
 	/* obtain file and size */
 	FILE *f = fopen(ini->file, "r");
