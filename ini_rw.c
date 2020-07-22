@@ -58,6 +58,7 @@ free_section_names(INI *ini)
 		free(ini->section_names[i]);
 	}
 	free(ini->section_names);
+	ini->section_names = NULL;
 }
 
 static void
@@ -73,6 +74,7 @@ free_item_names(INI *ini)
 		free(ini->item_names[i]);
 	}
 	free(ini->item_names);
+	ini->item_names = NULL;
 }
 
 section_t *
