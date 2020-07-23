@@ -290,7 +290,7 @@ ini_list_items(INI *ini, char *section)
 {
 	/* make sure section exists */
 	section_t *s;
-	if (!(s = find_section(ini, section))) {
+	if (!(s = find_section(ini, section)) || !s->items) {
 		return NULL;
 	}
 
