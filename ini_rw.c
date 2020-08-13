@@ -376,5 +376,6 @@ ini_free(INI *ini)
 		rm_section(ini, ini->sections);
 	}
 	free_section_names(ini);
+	free_item_names(ini);
 	free(ini);
 }
