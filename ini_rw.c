@@ -77,7 +77,7 @@ free_item_names(INI *ini)
 	ini->item_names = NULL;
 }
 
-section_t *
+static section_t *
 find_section(INI *ini, char *name)
 {
 	/* nothing loaded */
@@ -95,7 +95,7 @@ find_section(INI *ini, char *name)
 	return r;
 }
 
-item_t *
+static item_t *
 find_item(section_t *s, char *name)
 {
 	/* section empty */
@@ -113,7 +113,7 @@ find_item(section_t *s, char *name)
 	return r;
 }
 
-section_t *
+static section_t *
 add_section(INI *ini, char *name)
 {
 	/* return any existing section */
@@ -139,7 +139,7 @@ add_section(INI *ini, char *name)
 	return ini->tail;
 }
 
-int
+static int
 add_item(INI *ini, char *section, char *item, char *value)
 {
 	int r = 0;
@@ -341,7 +341,7 @@ ini_remove(INI* ini, char *section, char *item)
 		return 0;
 	}
 
-	/* remove entire section when item is NULL 
+	/* remove entire section when item is NULL
 	 * or this was the last item in section */
 	if (!item || !s->items->next) {
 		int r = rm_section(ini, s);
