@@ -231,32 +231,37 @@ ini_load(char *path)
 	char *r = data;
 	char *line_end;
 	char *current_section;
+	char *section_begin;
+	char *item_begin;
 	while ((line_end = strchr(r, '\n'))) {
 		if (r[0] == ';' || r[0] == '#') { /* skip comments */
 			r = line_end+1;
 			continue;
-		} if (strchr(r, '[') && strchr(r, '[') < line_end) {
+		} if ((section_begin = strchr(r, '[')) &&
+				section_begin < line_end &&
+				section_begin < strchr(r, '=')) {
 			/* extract section */
-			int l = strchr(r, ']')-strchr(r, '[');
+			int l = strchr(r, ']')-section_begin;
 			char section[l];
-			strncpy(section, strchr(r, '[')+1, l);
+			strncpy(section, section_begin+1, l);
 			strchr(section, ']')[0] = '\0';
 
 			/* store */
 			section_t *s = add_section(ini, section);
 			current_section = s->name;
-		} else if (strchr(r, '=') && strchr(r, '=') < line_end) {
+		} else if ((item_begin = strchr(r, '=')) && item_begin < line_end) {
 			/* extract item */
-			char item[strchr(r, '=')-r];
+			char item[item_begin-r];
 			while (r[0] == ' ' || r[0] == '\t') {
 				r++;
 			}
-			strncpy(item, r, strchr(r, '=')-r);
+			item_begin = strchr(r, '=');
+			strncpy(item, r, item_begin-r);
 			strpbrk(item, " \t")[0] = '\0';
 
 			/* extract value */
-			char value[line_end - strchr(r, '=')];
-			r = strchr(r, '=')+1;
+			char value[line_end - item_begin];
+			r = item_begin+1;
 			while ((++r)[0] == ' ' || r[0] == '\t');
 			strncpy(value, r, line_end-r);
 			value[line_end-r] = '\0';
