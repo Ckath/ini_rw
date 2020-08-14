@@ -257,12 +257,19 @@ ini_load(char *path)
 			}
 			item_begin = strchr(r, '=');
 			strncpy(item, r, item_begin-r);
-			strpbrk(item, " \t")[0] = '\0';
+			char *indent = strpbrk(item, " \t");
+			if (indent) {
+				indent[0] = '\0';
+			} else {
+				item[item_begin-r] = '\0';
+			}
 
 			/* extract value */
 			char value[line_end - item_begin];
 			r = item_begin+1;
-			while ((++r)[0] == ' ' || r[0] == '\t');
+			while (r[0] == ' ' || r[0] == '\t') {
+				r++;
+			}
 			strncpy(value, r, line_end-r);
 			value[line_end-r] = '\0';
 
