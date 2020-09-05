@@ -287,6 +287,12 @@ ini_list_sections(INI *ini)
 {
 	/* rebuild sections list on request, store in ini * */
 	free_section_names(ini);
+
+	/* check if theres anything to list loaded */
+	if (!ini->sections) {
+		return ini->section_names;
+	}
+
 	int n = 0;
 	for (section_t *s = ini->sections; s; s = s->next, n++) {
 		ini->section_names = realloc(ini->section_names, sizeof(char *)*(n+2));
