@@ -255,14 +255,12 @@ ini_load(char *path)
 			while (r[0] == ' ' || r[0] == '\t') {
 				r++;
 			}
-			item_begin = strchr(r, '=');
 			strncpy(item, r, item_begin-r);
-			char *indent = strpbrk(item, " \t");
-			if (indent) {
-				indent[0] = '\0';
-			} else {
-				item[item_begin-r] = '\0';
+			int pad_end = item_begin-r;
+			while (item[pad_end-1] == ' ' || item[pad_end-1] == '\t') {
+				pad_end--;
 			}
+			item[pad_end] = '\0';
 
 			/* extract value */
 			char value[line_end - item_begin];
