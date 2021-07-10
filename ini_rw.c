@@ -1,4 +1,3 @@
-#include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +6,11 @@
 
 typedef struct section_t section_t;
 typedef struct item_t item_t;
+
+/* work around the mysteries of PATH_MAX without including anything */
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
 
 #define FREE_SECTION(s) free(s->name); free(s)
 #define FREE_ITEM(i) free(i->name); free(i->value); free(i)
