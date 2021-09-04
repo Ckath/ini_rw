@@ -233,10 +233,10 @@ ini_load(char *path)
 	data[size] = '\0';
 
 	char *r = data;
-	char *line_end;
-	char *current_section;
-	char *section_begin;
-	char *item_begin;
+	char *line_end = NULL;
+	char *current_section = NULL;
+	char *section_begin = NULL;
+	char *item_begin = NULL;
 	while ((line_end = strchr(r, '\n'))) {
 		if (r[0] == ';' || r[0] == '#') { /* skip comments */
 			r = line_end+1;
